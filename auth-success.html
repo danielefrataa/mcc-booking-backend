@@ -1,0 +1,25 @@
+<!-- auth-success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OAuth Success</title>
+</head>
+<body>
+  <h1>Google Login Success ✅</h1>
+  <p id="status">Reading tokens...</p>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const accessToken = params.get('accessToken');
+    const refreshToken = params.get('refreshToken');
+
+    if (accessToken && refreshToken) {
+      document.getElementById('status').textContent = 'Tokens received!';
+      console.log('Access Token:', accessToken);
+      console.log('Refresh Token:', refreshToken);
+    } else {
+      document.getElementById('status').textContent = 'No tokens found in URL.';
+    }
+  </script>
+</body>
+</html>
