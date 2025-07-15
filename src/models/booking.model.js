@@ -53,6 +53,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false
     },
+    booking_code: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true
+    },
     kategoriId: {
       type: DataTypes.INTEGER,
       allowNull: true,

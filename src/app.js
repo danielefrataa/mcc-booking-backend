@@ -38,5 +38,7 @@ const bookingRoutes = require('./routes/bookings.routes');
 app.use('/api/bookings', bookingRoutes);
 
 
+const checkinRoutes = require('./routes/checkin.routes');
+app.use('/api/checkin', checkinRoutes);
 
 module.exports = app;

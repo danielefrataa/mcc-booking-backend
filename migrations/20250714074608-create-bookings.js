@@ -38,7 +38,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false
       },
-      purpose: { // atau eventName
+      purpose: {
         type: Sequelize.STRING(255),
         allowNull: true
       },
@@ -59,11 +59,16 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false
       },
+      booking_code: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        unique: true
+      },
       kategoriId: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-          model: 'Kategoris', // ✅ FIXED
+          model: 'Kategoris',
           key: 'id'
         },
         onUpdate: 'CASCADE',

@@ -120,5 +120,38 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ message: 'Error cancelling booking' });
     }
+  },
+
+  // PUT /api/bookings/:id/status
+async approveBooking(req, res) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!['approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Status tidak valid' });
+    }
+
+    const booking = await Booking.findByPk(id);
+    if (!booking) return res.status(404).json({ message: 'Booking tidak ditemukan' });
+
+    // Generate booking_code jika belum ada
+    if (status === 'approved' && !booking.booking_code) {
+      const random = Math.random().toString(36).substring(2, 7).toUpperCase();
+      const year = new Date().getFullYear();
+      booking.booking_code = `MCC-${year}-${random}`;
+    }
+
+    await booking.update({ status, booking_code: booking.booking_code });
+
+    res.json({
+      message: `Booking berhasil di-${status === 'approved' ? 'setujui' : 'tolak'}`,
+      booking
+    });
+  } catch (error) {
+    console.error('Approval error:', error);
+    res.status(500).json({ message: 'Terjadi kesalahan server' });
   }
+}
+
 };

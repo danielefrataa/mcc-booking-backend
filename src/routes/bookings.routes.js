@@ -16,6 +16,8 @@ router.get('/', authenticate, authorizeRoles('admin', 'staff'), bookingControlle
 // ✅ Update booking (user hanya bisa update miliknya sendiri)
 router.put('/:id', authenticate, bookingController.updateBooking);
 
+router.put('/:id/status', authenticate,bookingController.approveBooking);
+
 // ✅ Cancel booking
 router.delete('/:id', authenticate, bookingController.cancelBooking);
 
