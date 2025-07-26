@@ -41,4 +41,10 @@ app.use('/api/bookings', bookingRoutes);
 const checkinRoutes = require('./routes/checkin.routes');
 app.use('/api/checkin', checkinRoutes);
 
+
+const { swaggerUi, specs } = require('./docs/swagger'); // sesuaikan path
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+
 module.exports = app;

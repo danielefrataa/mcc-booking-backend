@@ -11,24 +11,35 @@ passport.use(new GoogleStrategy(
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
+      const email = profile.emails?.[0]?.value;
+
+      if (!email) {
+        console.error('❌ Email not found in Google profile');
+        return done(new Error('Email not found'), null);
+      }
+
+      // Cek apakah user sudah ada berdasarkan googleId
       const existingUser = await User.findOne({ where: { googleId: profile.id } });
       if (existingUser) return done(null, existingUser);
 
-      const email = profile.emails?.[0]?.value;
-      const user = await User.create({
+      // Buat user baru
+      const newUser = await User.create({
         googleId: profile.id,
         email,
-        isProfileComplete: false, // bisa diubah saat user melengkapi profil
+        role: 'user',                  // Pastikan field role ada di model
+        isProfileComplete: false,      // Field tambahan default
+        password: null,                // kalau password di-required, set null dan izinkan null di model
       });
 
-      return done(null, user);
+      return done(null, newUser);
     } catch (err) {
+      console.error('🔥 Error during Google OAuth strategy:', err);
       return done(err, null);
     }
   }
 ));
 
-// (Opsional) serialize user jika pakai session
+// Optional: serialize/deserialize kalau pakai session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
